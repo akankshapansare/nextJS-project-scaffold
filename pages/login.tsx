@@ -1,30 +1,46 @@
+import styles from "../styles/Home.module.css";
 import { Configuration, OpenAIApi } from "openai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export async function getStaticProps() {
-  const configuration = new Configuration({
-    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  });
-  const openaiapp = new OpenAIApi(configuration);
+const configuration = new Configuration({
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+});
+const openaiapp = new OpenAIApi(configuration);
+
+async function generateImage(prompt: string) {
   const response = await openaiapp.createImage({
-    prompt:
-      "anime two littile sisters with pink and yellow dress playing in woods",
+    prompt: prompt,
     n: 1,
     size: "1024x1024",
   });
-  const imageUrl = response.data.data[0].url;
-  return {
-    props: { imageUrl },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 30 seconds
-    revalidate: 30, // In seconds };
-  };
+  return response.data.data[0].url;
 }
 
-export default function Login({ imageUrl }) {
+export default function Login() {
+  const [imageUrl, setImageUrl] = useState("");
+  const [prompt, setPrompt] = useState(
+    "anime of two littile girls with beautiful eyes playing in the woods"
+  );
+
+  function handleClick() {
+    generateImage(prompt).then((image) => {
+      setImageUrl(image!);
+    });
+  }
+
+  useEffect(() => setImageUrl(""), []);
+
   return (
-    <div>
+    <div className={styles.container}>
+      <a>Generate Images with AI</a>
+      <div>
+        <input
+          placeholder="Describe the image you want to see"
+          onChange={(event) => setPrompt(event.target.value)}
+          value={prompt}
+        />
+        <button onClick={handleClick}>Submit</button>
+      </div>
       <img src={imageUrl}></img>
     </div>
   );

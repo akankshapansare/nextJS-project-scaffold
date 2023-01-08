@@ -1,3 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 0 2rem;
+}
+
+.container div input {
+  padding: 0 2rem;
+  margin: 1rem;
+  width: 30rem;
+}
+
+.container div button {
+  padding: 0 2rem;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -97,7 +116,7 @@
 
 .center::before,
 .center::after {
-  content: '';
+  content: "";
   left: 50%;
   position: absolute;
   filter: blur(45px);
@@ -125,7 +144,7 @@
 
 .thirteen::before,
 .thirteen::after {
-  content: '';
+  content: "";
   position: absolute;
   z-index: -1;
 }
